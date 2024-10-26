@@ -101,6 +101,7 @@ loadMoreButton.addEventListener('click', async () => {
     loadMoreButton.style.display = 'none';
   }
   if (images.totalHits <= currentPage * 15) {
+    loadMoreButton.style.display = 'none';
     const message = document.createElement('p');
     message.textContent =
       "We're sorry, but you've reached the end of search results.";
