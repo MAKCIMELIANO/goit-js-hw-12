@@ -33,6 +33,8 @@ const lightbox = new SimpleLightbox('.gallery a', {
 
 let currentPage = 1;
 let searchQueryGlobal = '';
+const imagesPerPage = 15;
+const toastTimeout = 3000;
 
 searchForm.addEventListener('submit', async event => {
   event.preventDefault();
@@ -44,7 +46,7 @@ searchForm.addEventListener('submit', async event => {
       title: 'Error',
       message: 'Please enter your search query!',
       position: 'topRight',
-      timeout: 3000,
+      timeout: toastTimeout,
     });
     return;
   }
@@ -58,6 +60,7 @@ searchForm.addEventListener('submit', async event => {
   const imageGallery = renderImageGallery(images.hits);
   imageGallery.forEach(imageCard => {
     gallery.appendChild(imageCard);
+    lightbox.refresh();
   });
 
   if (images.hits.length === 0) {
@@ -66,12 +69,12 @@ searchForm.addEventListener('submit', async event => {
       message:
         'Sorry, there are no images matching your search query. Please try again!',
       position: 'topRight',
-      timeout: 3000,
+      timeout: toastTimeout,
     });
     loadMoreButton.style.display = 'none';
     loader.style.display = 'none';
   } else {
-    if (images.totalHits <= currentPage * 15) {
+    if (images.totalHits <= currentPage * imagesPerPage) {
       loadMoreButton.style.display = 'none';
       loader.style.display = 'none';
       document.querySelector('#search-input').value = '';
@@ -85,7 +88,7 @@ searchForm.addEventListener('submit', async event => {
       lightbox.refresh();
       return;
     }
-    loadMoreButton.disabled = images.hits.length < 15;
+    loadMoreButton.disabled = images.hits.length < imagesPerPage;
     if (images.hits.length > 0) {
       loadMoreButton.style.display = 'block';
       loader.style.display = 'none';
@@ -110,11 +113,11 @@ loadMoreButton.addEventListener('click', async () => {
   });
   lightbox.refresh();
   loader.style.display = 'none';
-  loadMoreButton.disabled = images.hits.length < 15;
+  loadMoreButton.disabled = images.hits.length < imagesPerPage;
   if (images.hits.length === 0) {
     loadMoreButton.style.display = 'none';
   }
-  if (images.totalHits <= currentPage * 15) {
+  if (images.totalHits <= currentPage * imagesPerPage) {
     loadMoreButton.style.display = 'none';
     loader.style.display = 'none';
     const messageContainer = document.createElement('div');

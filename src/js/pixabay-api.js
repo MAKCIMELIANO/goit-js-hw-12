@@ -3,6 +3,7 @@ import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
 const apiKey = '44261766-43e443b40d02cd3bf18e38bdd';
+const toastTimeout = 3000;
 
 export async function fetchImages(searchQuery, page = 1) {
   try {
@@ -15,7 +16,7 @@ export async function fetchImages(searchQuery, page = 1) {
       title: 'Error',
       message: 'Error while receiving images!',
       position: 'topRight',
-      timeout: 3000,
+      timeout: toastTimeout,
     });
     console.error(error);
 
