@@ -59,7 +59,7 @@ searchForm.addEventListener('submit', async event => {
   imageGallery.forEach(imageCard => {
     gallery.appendChild(imageCard);
   });
-  lightbox.refresh();
+
   if (images.hits.length === 0) {
     iziToast.error({
       title: 'No results',
@@ -71,6 +71,20 @@ searchForm.addEventListener('submit', async event => {
     loadMoreButton.style.display = 'none';
     loader.style.display = 'none';
   } else {
+    if (images.totalHits <= currentPage * 15) {
+      loadMoreButton.style.display = 'none';
+      loader.style.display = 'none';
+      document.querySelector('#search-input').value = '';
+      const messageContainer = document.createElement('div');
+      messageContainer.classList.add('end-of-results-message');
+      const message = document.createElement('p');
+      message.textContent =
+        "We're sorry, but you've reached the end of search results.";
+      messageContainer.appendChild(message);
+      gallery.appendChild(messageContainer);
+      lightbox.refresh();
+      return;
+    }
     loadMoreButton.disabled = images.hits.length < 15;
     if (images.hits.length > 0) {
       loadMoreButton.style.display = 'block';
@@ -102,9 +116,13 @@ loadMoreButton.addEventListener('click', async () => {
   }
   if (images.totalHits <= currentPage * 15) {
     loadMoreButton.style.display = 'none';
+    loader.style.display = 'none';
+    const messageContainer = document.createElement('div');
+    messageContainer.classList = 'end-of-results-message';
     const message = document.createElement('p');
     message.textContent =
       "We're sorry, but you've reached the end of search results.";
-    gallery.appendChild(message);
+    messageContainer.appendChild(message);
+    gallery.appendChild(messageContainer);
   }
 });

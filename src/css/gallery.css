@@ -168,3 +168,10 @@ main {
         transform: rotate(360deg);
     }
 }
+
+
+.end-of-results-message {
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+}
